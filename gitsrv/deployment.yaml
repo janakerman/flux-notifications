@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: gitsrv
+  name: gitsrv
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: gitsrv
+  template:
+    metadata:
+      labels:
+        name: gitsrv
+    spec:
+      containers:
+        - name: git
+          image: fluxcd/gitsrv:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: REPO
+              value: "cluster.git"
+            - name: TAR_URL
+              value: "https://github.com/stefanprodan/podinfo/archive/3.2.0.tar.gz"
+          ports:
+            - containerPort: 22
+              name: ssh
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: 22
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 22
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          volumeMounts:
+            - mountPath: /git-server/repos
+              name: git-server-data
+            - mountPath: /git-server/keys
+              name: ssh-keys
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+      volumes:
+        - name: ssh-keys
+          projected:
+            sources:
+            - secret:
+                name: flux-bootstrap
+            - secret:
+                name: flux-git-deploy
+        - name: git-server-data
+          emptyDir: {}
