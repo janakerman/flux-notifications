@@ -18,6 +18,6 @@ spec:
   eventSeverity: info
   eventSources:
     - kind: GitRepository
-      name: '*'
+      name: 'podinfo'
     - kind: Kustomization
-      name: '*'
+      name: 'podinfo'
