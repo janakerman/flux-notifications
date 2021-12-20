@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: signalbox
+  name: signalbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: signalbox
+  template:
+    metadata:
+      labels:
+        name: signalbox
+    spec:
+      containers:
+        - name: git
+          image: janakerman/signalbox:b0c4a14
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
