@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: git
-          image: janakerman/signalbox:b0c4a14
+          image: janakerman/signalbox:2434c2d
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
