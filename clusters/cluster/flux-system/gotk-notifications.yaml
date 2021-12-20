@@ -18,9 +18,9 @@ spec:
   eventSeverity: info
   eventSources:
     - kind: GitRepository
-      name: 'podinfo'
+      name: '*'
     - kind: Kustomization
-      name: 'podinfo'
+      name: '*'
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta1
 kind: Provider
@@ -42,6 +42,6 @@ spec:
   eventSeverity: info
   eventSources:
     - kind: GitRepository
-      name: 'podinfo'
+      name: '*'
     - kind: Kustomization
-      name: 'podinfo'
+      name: '*'
